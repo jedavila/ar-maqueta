@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <title>Maqueta Isabella Davila</title>
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <!-- AR.js para A-Frame (marcadores) -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      embedded
+      arjs="sourceType: webcam;
+          debugUIEnabled: false;
+          trackingMethod: best;"
+      renderer="antialias: true; alpha: true; logarithmicDepthBuffer: true;"
+      loading-screen="enabled: false"
+    >
+      <!-- Marcador Hiro (estándar AR.js para pruebas) -->
+      <a-marker
+        id="marcador"
+        type="pattern"
+        url="Pattern.patt"
+        smooth="true"
+        smoothCount="8"
+        smoothTolerance="0.01"
+        smoothThreshold="5"
+      >
+        <a-entity
+          id="modelo"
+          gltf-model="url(modelo.glb)"
+          position="0 0 0"
+          rotation="0 0 0"
+          scale="1 1 1"
+        >
+        </a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+    <div id="ui" role="region" aria-label="Controles AR">
+      <!-- Estado del marcador -->
+      <div id="status-bar" role="status" aria-live="polite">
+        <div id="dot"></div>
+        <span id="status-text">Apunta al marcador Hiro</span>
+      </div>
+
+      <!-- Botones de rotación -->
+      <div id="controls">
+        <!-- Rotar izquierda -->
+        <button class="btn" id="btn-izq" aria-label="Rotar a la izquierda">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+
+        <!-- Reset rotación -->
+        <button class="btn" id="btn-reset" aria-label="Restablecer orientación">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <polyline points="3 3 3 8 8 8" />
+          </svg>
+        </button>
+
+        <!-- Rotar derecha -->
+        <button class="btn" id="btn-der" aria-label="Rotar a la derecha">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hint solo en pantallas grandes -->
+    <div id="hint" aria-hidden="true">
+      <span>Imprime el marcador<br /><strong>Hiro</strong> para comenzar</span>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
