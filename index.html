@@ -24,7 +24,8 @@
       vr-mode-ui="enabled: false"
       arjs="sourceType: webcam;
           debugUIEnabled: false;
-          trackingMethod: best;"
+          trackingMethod: best;
+          patternRatio: 0.70;"
       renderer="antialias: true; alpha: true; logarithmicDepthBuffer: true;"
       loading-screen="enabled: false"
     >
@@ -54,7 +55,7 @@
       <!-- Estado del marcador -->
       <div id="status-bar" role="status" aria-live="polite">
         <div id="dot"></div>
-        <span id="status-text">Apunta al marcador Hiro</span>
+        <span id="status-text">Apunte al QR porfavor</span>
       </div>
 
       <!-- Botones de rotación -->
@@ -85,7 +86,7 @@
 
     <!-- Hint solo en pantallas grandes -->
     <div id="hint" aria-hidden="true">
-      <span>Imprime el marcador<br /><strong>Hiro</strong> para comenzar</span>
+      <span>Apunte al marcador<br /><strong>QR</strong> para comenzar</span>
     </div>
     <script src="app.js"></script>
   </body>
