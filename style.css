@@ -1,195 +1,224 @@
 /* ── Reset & base ── */
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-      touch-action: none;
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
-                   'Segoe UI', system-ui, sans-serif;
-    }
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  touch-action: none;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui,
+    sans-serif;
+}
 
-    /* ── A-Frame ocupa toda la pantalla ── */
-    a-scene {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-      z-index: 0;
-    }
+/* ── A-Frame ocupa toda la pantalla ── */
+/* a-scene {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
+} */
+/* ── AR.js inyecta un <video> en el body — lo forzamos full screen ── */
+body > video {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  z-index: 0 !important;
+}
 
-    /* Canvas y video de AR.js al 100% */
-    canvas,
-    .a-canvas {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
-    }
+/* Canvas de Three.js encima del video, transparente */
+canvas,
+.a-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1 !important;
+}
 
-    /* ── Overlay de UI (encima del canvas) ── */
-    #ui {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      pointer-events: none;   /* el overlay no bloquea la cámara */
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* Canvas y video de AR.js al 100% */
+canvas,
+.a-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
 
-    /* ── Barra superior: estado del marcador ── */
-    #status-bar {
-      pointer-events: none;
-      margin-top: max(16px, env(safe-area-inset-top, 16px));
-      background: rgba(0, 0, 0, 0.40);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 0.5px solid rgba(255, 255, 255, 0.18);
-      border-radius: 999px;
-      padding: 7px 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity 0.5s ease;
-    }
+/* ── Overlay de UI (encima del canvas) ── */
+#ui {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none; /* el overlay no bloquea la cámara */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    #status-bar.oculto {
-      opacity: 0;
-    }
+/* ── Barra superior: estado del marcador ── */
+#status-bar {
+  pointer-events: none;
+  margin-top: max(16px, env(safe-area-inset-top, 16px));
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 7px 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.5s ease;
+}
 
-    #dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #f0a500;
-      flex-shrink: 0;
-      transition: background 0.3s ease;
-    }
+#status-bar.oculto {
+  opacity: 0;
+}
 
-    #dot.detectado {
-      background: #34d399;
-      animation: none;
-    }
+#dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #f0a500;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
 
-    #dot:not(.detectado) {
-      animation: parpadeo 1.4s infinite ease-in-out;
-    }
+#dot.detectado {
+  background: #34d399;
+  animation: none;
+}
 
-    @keyframes parpadeo {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.25; }
-    }
+#dot:not(.detectado) {
+  animation: parpadeo 1.4s infinite ease-in-out;
+}
 
-    #status-text {
-      color: rgba(255, 255, 255, 0.90);
-      font-size: clamp(11px, 3.2vw, 14px);
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-    }
+@keyframes parpadeo {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
 
-    /* ── Controles inferiores ── */
-    #controls {
-      pointer-events: all;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(16px, 5vw, 32px);
-      padding-bottom: max(28px, env(safe-area-inset-bottom, 28px));
-      padding-left: 24px;
-      padding-right: 24px;
-      width: 100%;
-    }
+#status-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(11px, 3.2vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
 
-    /* Botón base */
-    .btn {
-      --sz: clamp(56px, 15vw, 72px);
-      width: var(--sz);
-      height: var(--sz);
-      border-radius: 50%;
-      border: 0.5px solid rgba(255, 255, 255, 0.22);
-      background: rgba(0, 0, 0, 0.38);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      user-select: none;
-      transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        transform 0.1s ease;
-    }
+/* ── Controles inferiores ── */
+#controls {
+  pointer-events: all;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 5vw, 32px);
+  padding-bottom: max(28px, env(safe-area-inset-bottom, 28px));
+  padding-left: 24px;
+  padding-right: 24px;
+  width: 100%;
+}
 
-    .btn:active,
-    .btn.presionado {
-      background: rgba(255, 255, 255, 0.22);
-      border-color: rgba(255, 255, 255, 0.55);
-      transform: scale(0.92);
-    }
+/* Botón base */
+.btn {
+  --sz: clamp(56px, 15vw, 72px);
+  width: var(--sz);
+  height: var(--sz);
+  border-radius: 50%;
+  border: 0.5px solid rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  user-select: none;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
 
-    .btn svg {
-      width: 38%;
-      height: 38%;
-      fill: none;
-      stroke: #fff;
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      pointer-events: none;
-    }
+.btn:active,
+.btn.presionado {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: scale(0.92);
+}
 
-    /* Botón reset: más pequeño y más sutil */
-    #btn-reset {
-      --sz: clamp(42px, 11vw, 54px);
-      opacity: 0.72;
-    }
+.btn svg {
+  width: 38%;
+  height: 38%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
 
-    #btn-reset svg {
-      width: 42%;
-      height: 42%;
-    }
+/* Botón reset: más pequeño y más sutil */
+#btn-reset {
+  --sz: clamp(42px, 11vw, 54px);
+  opacity: 0.72;
+}
 
-    /* ── Hint imprimible (solo visible en pantalla grande / desktop) ── */
-    #hint {
-      position: fixed;
-      bottom: max(28px, env(safe-area-inset-bottom, 28px));
-      right: 20px;
-      z-index: 101;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
+#btn-reset svg {
+  width: 42%;
+  height: 42%;
+}
 
-    @media (min-width: 640px) {
-      #hint {
-        opacity: 1;
-      }
-    }
+/* ── Hint imprimible (solo visible en pantalla grande / desktop) ── */
+#hint {
+  position: fixed;
+  bottom: max(28px, env(safe-area-inset-bottom, 28px));
+  right: 20px;
+  z-index: 101;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
 
-    #hint span {
-      display: block;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 0.5px solid rgba(255,255,255,0.15);
-      border-radius: 12px;
-      padding: 8px 14px;
-      color: rgba(255,255,255,0.70);
-      font-size: 11px;
-      line-height: 1.5;
-      max-width: 180px;
-      text-align: center;
-    }
+@media (min-width: 640px) {
+  #hint {
+    opacity: 1;
+  }
+}
+
+#hint span {
+  display: block;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  line-height: 1.5;
+  max-width: 180px;
+  text-align: center;
+}
