@@ -13,7 +13,6 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #000;
   touch-action: none;
   font-family:
     -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui,
@@ -21,32 +20,12 @@ body {
 }
 
 /* ── A-Frame ocupa toda la pantalla ── */
-/* a-scene {
+a-scene {
   position: fixed !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
   z-index: 0;
-} */
-/* ── AR.js inyecta un <video> en el body — lo forzamos full screen ── */
-body > video {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  object-fit: cover !important;
-  z-index: 0 !important;
-}
-
-/* Canvas de Three.js encima del video, transparente */
-canvas,
-.a-canvas {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 1 !important;
 }
 
 /* Canvas y video de AR.js al 100% */
