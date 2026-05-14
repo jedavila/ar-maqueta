@@ -103,7 +103,7 @@
         if (ocultarTimer) clearTimeout(ocultarTimer);
         statusBar.classList.remove('oculto');
         dot.classList.remove('detectado');
-        statusText.textContent = 'Apunta al marcador Hiro';
+        statusText.textContent = 'Apunte al QR porfavor';
     });
 
 })();
